@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "Super.Grpc.Server.Protos";
+
+package Typical;
+
+service TypicalGrpc {  
+  //无参数
+  rpc NoStreamNoParam (google.protobuf.Empty) returns (Reply1);
+
+  //带参数
+  rpc NoStream (Request1) returns (Reply1);
+
+  rpc NoStreamArrayParam (Request2) returns (google.protobuf.Empty);
+
+  rpc ServerStream(Request1) returns(stream Reply1);
+
+  rpc ClientStream(stream Request1) returns(Reply1);
+
+  rpc BothStream(stream Request1) returns(stream Reply1);
+
+  //rpc Login(LoginRequest) returns (LoginResponse);//放在普通的http请求中，从而方便对管道做全局处理
+
+  rpc RequestWithAuth(google.protobuf.Empty) returns (Reply1);
+}
+
+message Request1 {
+  int32 req1_Id=1;
+  string req1_Name = 2;
+  InnerObj1 req1_inner1=3;
+}
+
+message Reply1 {
+  int32 rep1_id=1;
+  string rep1_name = 2;
+}
+
+message InnerObj1 {
+  string name = 1;
+}
+
+message Request2{
+ repeated int32 ids=1;
+}
