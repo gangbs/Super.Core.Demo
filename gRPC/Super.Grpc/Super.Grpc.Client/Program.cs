@@ -1,6 +1,5 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Super.Grpc.Server.Protos;
 using System;
@@ -12,21 +11,22 @@ namespace Super.Grpc.Client
 {
     class Program
     {
-        static GrpcChannel channel = CreateChannel("https://106.54.47.78:5656");
-           
+        static GrpcChannel channel = CreateChannel("http://106.54.47.78:88");
+
+
         static async Task Main(string[] args)
         {
             //var invoker = channel.Intercept(new GrpcInterceptor());
             //var client = new TypicalGrpc.TypicalGrpcClient(invoker);
-
             var client = new TypicalGrpc.TypicalGrpcClient(channel);
-
 
             await RequestWithAuth(client);
 
 
             Console.ReadKey();
         }
+
+        #region 管道创建
 
         static string GetToken()
         {
@@ -41,24 +41,19 @@ namespace Super.Grpc.Client
         /// <returns></returns>
         static GrpcChannel CreateChannel(string address)
         {
-            #region 添加统一的认证信息
+            // This switch must be set before creating the GrpcChannel/HttpClient.
+            //若不采用http,则必须对该项进行设置
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);               
 
-            string token = GetToken();
-            var credentials = CallCredentials.FromInterceptor((context, metadata) =>
-            {
-                metadata.Add("Authorization", $"Bearer {token}");
-                return Task.CompletedTask;
-            });
-
-            #endregion
 
             #region 创建管道
-
             var channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions
             {
-                Credentials = ChannelCredentials.Create(new SslCredentials(), credentials),
-                HttpClient = IgnorCertificate()                
-                 
+                //Credentials = ChannelCredentials.Create(new SslCredentials(), credentials),                
+                //Credentials = ChannelCredentials.Insecure,//不需要证书
+
+                HttpClient = CreatHttpClient(),
+                DisposeHttpClient=true//在管道取消时，同时取消自定义的httpclient
             });
 
             #endregion
@@ -66,14 +61,16 @@ namespace Super.Grpc.Client
             return channel;
         }
 
-        static HttpClient IgnorCertificate()
+        static HttpClient CreatHttpClient()
         {
-            var httpHandler = new HttpClientHandler();
-            httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-            var client = new HttpClient(httpHandler);
+            string token = GetToken();
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             return client;
         }
-        
+
+        #endregion
+
         static void NoStreamNoParam(TypicalGrpcClient client)
         {
             var r = client.NoStreamNoParam(new Empty());

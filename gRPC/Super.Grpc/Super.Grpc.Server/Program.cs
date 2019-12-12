@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
 
 namespace Super.Grpc.Server
@@ -21,6 +22,12 @@ namespace Super.Grpc.Server
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
+                    //webBuilder.ConfigureKestrel(options =>
+                    //{
+                    //    // Setup a HTTP/2 endpoint without TLS.
+                    //    options.ConfigureEndpointDefaults(o => o.Protocols = HttpProtocols.Http2);
+                    //    //options.ConfigureHttpsDefaults(c => {c. });
+                    //});
                     webBuilder.UseStartup<Startup>();
                 });
     }
