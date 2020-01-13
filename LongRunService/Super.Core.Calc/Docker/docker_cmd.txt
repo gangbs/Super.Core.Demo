@@ -1,0 +1,12 @@
+﻿
+宿主机数据卷位置：/var/lib/docker/volumes/
+
+docker volume create sca_config
+
+docker volume create sca_logs
+
+docker build -t sca_image:api .
+
+docker run -d -p 60:6060 --name=sca_container --mount src=sca_config,dst=/app/Config  --mount src=sca_logs,dst=/app/Logs --restart=always sca_image:api
+
+

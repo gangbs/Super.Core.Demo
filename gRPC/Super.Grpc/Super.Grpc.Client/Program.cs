@@ -24,6 +24,7 @@ namespace Super.Grpc.Client
 
 
             Console.ReadKey();
+            
         }
 
         #region 管道创建

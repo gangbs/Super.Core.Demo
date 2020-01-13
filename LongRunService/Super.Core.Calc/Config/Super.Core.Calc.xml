@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Super.Core.Calc</name>
+    </assembly>
+    <members>
+        <member name="M:Super.Core.Calc.CalcService.CalcObject.BeforeCalc">
+            <summary>
+            计算前的相关处理
+            </summary>
+        </member>
+        <member name="M:Super.Core.Calc.CalcService.CalcObject.Calc">
+            <summary>
+            计算
+            </summary>
+        </member>
+        <member name="M:Super.Core.Calc.CalcService.CalcObject.AfterCalc">
+            <summary>
+            计算后的处理
+            </summary>
+        </member>
+        <member name="M:Super.Core.Calc.CalcService.CalcObject.CalcTask(System.Threading.CancellationToken)">
+            <summary>
+            一个计算任务过程
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Super.Core.Calc.Program.CmdArgsHandler(System.String[])">
+            <summary>
+            cmd运行参数处理
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:Super.Core.Calc.Startup.ExtraServiceRegist(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            本地IOC容器注册
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="T:Super.Core.Calc.Startup.AuthorizationHeaderOperationFilter">
+            <summary>
+            判断是否需要添加Authorize Header
+            </summary>
+        </member>
+        <member name="M:Super.Core.Calc.Startup.AuthorizationHeaderOperationFilter.Apply(Swashbuckle.AspNetCore.Swagger.Operation,Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext)">
+            <summary>
+            为需要认证的Operation添加认证参数
+            </summary>
+            <param name="operation">The Swashbuckle operation.</param>
+            <param name="context">The Swashbuckle operation filter context.</param>
+        </member>
+    </members>
+</doc>
